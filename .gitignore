@@ -34,3 +34,11 @@ coverage/
 .vite/
 .turbo/
 *.tsbuildinfo
+
+# --- 本演练运行时数据（含加密密钥槽，不提交）---
+data/
+*.db
+*.db-wal
+*.db-shm
+*.key
+.trash/

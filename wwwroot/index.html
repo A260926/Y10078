@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>证书轮换演练器</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>证书轮换演练器</h1>
+    <div class="clock">
+      <span>演练时钟：<strong id="clock-now">—</strong></span>
+      <span class="clock-type" id="clock-type"></span>
+      <button id="btn-advance">推进 60 分钟</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="cards">
+      <article class="card">
+        <h2>当前活动证书</h2>
+        <div id="active-cert" class="cert empty">暂无活动证书</div>
+      </article>
+      <article class="card">
+        <h2>候选证书</h2>
+        <div id="candidate-cert" class="cert empty">暂无候选证书</div>
+      </article>
+    </section>
+
+    <section class="card">
+      <div class="section-head">
+        <h2>当前轮换与策略判定</h2>
+        <div id="phase-badge" class="badge">—</div>
+      </div>
+      <div id="rotation-meta"></div>
+      <div id="policy-judgement" class="policy"></div>
+      <div id="manual-banner" class="manual hidden"></div>
+      <div id="failure-banner" class="failure hidden"></div>
+    </section>
+
+    <section class="card">
+      <h2>各实例确认</h2>
+      <table class="grid">
+        <thead>
+          <tr>
+            <th>实例</th><th>分发尝试</th><th>已接收</th><th>已装载</th><th>最近分发错误</th><th>操作</th>
+          </tr>
+        </thead>
+        <tbody id="instance-rows"></tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>轮换操作</h2>
+      <div class="actions">
+        <button id="btn-distribute-all">重试/补全分发</button>
+        <button id="btn-activate">按策略激活</button>
+        <button id="btn-retire">退出旧证书</button>
+        <button id="btn-complete">完成轮换</button>
+        <button id="btn-rollback" class="warn">回滚</button>
+        <button id="btn-fail" class="danger">标记失败</button>
+      </div>
+      <div class="actions drill">
+        <span class="group-label">演练注入：</span>
+        <button id="btn-inject-fail">注入节点 B 分发失败</button>
+        <button id="btn-clear-fail">清除注入故障</button>
+        <button id="btn-inject-dup">注入下一次序列号重复</button>
+      </div>
+      <details class="start-form">
+        <summary>发起一次新轮换</summary>
+        <div class="form-row">
+          <label>轮换标识（可空）<input id="new-id" placeholder="rot-003" /></label>
+          <label>实例（逗号分隔）<input id="new-instances" placeholder="edge-node-a,edge-node-b" /></label>
+          <label>策略
+            <select id="new-policy">
+              <option value="quorum">quorum（多数）</option>
+              <option value="unanimous" selected>unanimous（全部）</option>
+            </select>
+          </label>
+          <label>重叠分钟<input id="new-overlap" type="number" value="60" min="1" /></label>
+          <label>有效天数<input id="new-lifetime" type="number" value="90" min="1" /></label>
+          <button id="btn-start">发起 proposed</button>
+        </div>
+      </details>
+      <pre id="action-result" class="result hidden"></pre>
+    </section>
+
+    <section class="card">
+      <h2>完整事件序列</h2>
+      <div class="event-wrap">
+        <table class="grid events">
+          <thead>
+            <tr><th>#</th><th>轮换</th><th>版本</th><th>时间（UTC）</th><th>事件</th><th>详情</th><th>幂等键</th></tr>
+          </thead>
+          <tbody id="event-rows"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
